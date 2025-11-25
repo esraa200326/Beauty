@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="ar" dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BeautyA - Beauty & Skincare</title>
+
+    <!-- Scripts -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2"></script>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@400..700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Styles -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+
+    <style>
+      body {
+        font-family: "Reem Kufi";
+      }
+    </style>
+  </head>
+
+  <body class="bg-white">
+    <div id="app">
+      <!-- Top Banner -->
+      <div
+        class="bg-[#1F1F1F] text-white text-center py-3 text-sm md:text-lg font-medium px-4"
+      >
+        FREE Shipping On Orders Above 1000 EGP !
+      </div>
+
+      <!-- Header -->
+      <header class="bg-white shadow-sm sticky top-0 z-50">
+  <div class="container mx-auto px-4 sm:px-8 lg:px-[100px]">
+    <!-- Top Bar -->
+    <div class="grid grid-cols-1 md:grid-cols-3 items-center gap-4 md:gap-8 py-4">
+
+
+      <!-- Logo -->
+      <div class="flex items-center justify-center md:justify-center">
+        <div class="w-35 h-30 md:w-30 md:h-30 flex items-center justify-center">
+          <img src="/imgs/logo.png" alt="logo" class="w-full h-full object-contain" />
+        </div>
+      </div>
+
+      <!-- Search (Desktop only in this row) -->
+      <div class="hidden md:flex justify-center order-3 md:order-2">
+        <div class="relative w-full">
+          <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
+            <i class="ph-light ph-magnifying-glass"></i>
+          </span>
+          <input
+  type="text"
+  v-model="searchQuery"
+  @input="handleSearchInput"
+  placeholder=""
+  class="w-full pl-10 pr-24 md:pr-32 py-2 md:py-3 border border-gray-300 rounded-full focus:outline-none focus:border-[#DE2677] text-sm md:text-base"
+/>
+          <button class="absolute top-0 right-0 h-full bg-[#DE2677] text-white px-3 md:px-6 rounded-full text-xs md:text-sm hover:bg-[#c01f66]">
+            Search here
+          </button>
+          <ul
+            v-if="showResults"
+            class="absolute z-50 mt-2 w-full bg-white border border-gray-200 rounded-lg shadow-lg max-h-60 overflow-y-auto text-sm"
+          >
+            <li
+              v-for="item in filteredResults"
+              :key="item"
+              class="p-2 hover:bg-pink-50 hover:text-[#DE2677] cursor-pointer"
+              @click="selectResult(item)"
+            >
+              {{ item }}
+            </li>
+            <li v-if="filteredResults.length === 0" class="p-2 text-gray-500 text-center">
+              No results found
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Icons & Language -->
+      <div class="flex items-center justify-center md:justify-end gap-2 md:gap-4 order-2 md:order-3">
+        <button
+          @click="mobileMenuOpen = !mobileMenuOpen"
+          class="lg:hidden p-2 text-2xl hover:text-[#DE2677]"
+        >
+          <i :class="mobileMenuOpen ? 'ph-light ph-x' : 'ph-light ph-list'"></i>
+        </button>
+        <a href="/cart.html" class="p-2 text-xl md:text-2xl hover:text-[#DE2677]">
+          <i class="ph-light ph-shopping-bag"></i>
+        </a>
+        <a href="/favorites.html" class="p-2 text-xl md:text-2xl hover:text-[#DE2677]">
+          <i class="ph-light ph-heart"></i>
+        </a>
+        <button class="p-2 text-xl md:text-2xl hover:text-[#DE2677]">
+  <i class="ph-light ph-user"></i>
+</button>
+        
+      
+
+
+        <!-- Language Dropdown -->
+        <div class="hidden md:block relative">
+          <button
+            @click="open = !open"
+            class="flex items-center gap-2 px-2 md:px-3 py-2"
+          >
+            <img :src="selected.flag" class="w-4 h-4 md:w-5 md:h-5 rounded-md" />
+            <span class="font-bold text-sm md:text-base">{{ selected.label }}</span>
+            <i class="ph ph-caret-down text-xs md:text-sm"></i>
+          </button>
+
+          <div
+            v-show="open"
+            class="absolute left-0 mt-1 bg-white border rounded shadow-lg w-full z-50"
+          >
+            <div
+              v-for="lang in languages"
+              :key="lang.code"
+              @click="selectLanguage(lang)"
+              class="flex items-center gap-2 px-3 py-2 hover:bg-gray-100 cursor-pointer"
+            >
+              <img :src="lang.flag" class="w-4 h-4 md:w-5 md:h-5 rounded-md" />
+              <span class="text-sm md:text-base">{{ lang.label }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Search (Below Logo) -->
+    <div class="md:hidden pb-4">
+      <div class="relative w-full">
+        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
+          <i class="ph-light ph-magnifying-glass"></i>
+        </span>
+        <input
+  type="text"
+  v-model="searchQuery"
+  @input="handleSearchInput"
+  placeholder=""
+  class="w-full pl-10 pr-24 py-2 border border-gray-300 rounded-full focus:outline-none focus:border-[#DE2677] text-sm"
+/>
+        <button class="absolute top-0 right-0 h-full bg-[#DE2677] text-white px-4 rounded-full text-xs hover:bg-[#c01f66]">
+          Search here
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Desktop Navigation - Border Full Width -->
+  <nav class="hidden md:block border-t border-gray-200 relative shadow-xl">
+    <ul
+      dir="ltr"
+      class="flex items-center justify-center space-x-4 md:space-x-8 py-4 text-xs md:text-sm font-medium whitespace-nowrap px-4"
+    >
+      <li><a href="/index.html" class="hover:text-[#DE2677]">Home</a></li>
+
+      <!-- Shop By Category -->
+      <li class="relative group">
+        <a href="/shop.html" class="hover:text-[#DE2677] flex items-center focus:outline-none">
+          Shop By Category
+          <span class="ml-1">▼</span>
+        </a>
+
+        <!-- Mega Menu -->
+        <div class="absolute left-1/2 transform -translate-x-1/2 top-full mt-2 hidden group-hover:grid grid-cols-4 gap-8 bg-white shadow-lg border border-gray-100 p-8 w-[900px] z-50">
+          <!-- Column 1 -->
+          <div>
+            <h3 class="font-semibold text-gray-900 mb-2">Makeup</h3>
+            <ul class="space-y-1 text-gray-600 text-sm">
+              <li>Acne Patch</li>
+              <li>After Sun</li>
+              <li>Body Lotion</li>
+              <li>Body Scrub</li>
+              <li>Body Splash</li>
+              <li>Cleanser</li>
+              <li>Conditioner</li>
+              <li>Deodorant</li>
+            </ul>
+
+            <h3 class="font-semibold text-gray-900 mt-6 mb-2">Nail Care</h3>
+            <ul class="space-y-1 text-gray-600 text-sm">
+              <li>Acne Patch</li>
+              <li>After Sun</li>
+              <li>Body Lotion</li>
+              <li>Body Scrub</li>
+              <li>Body Splash</li>
+              <li>Cleanser</li>
+              <li>Conditioner</li>
+              <li>Deodorant</li>
+            </ul>
+          </div>
+
+          <!-- Column 2 -->
+          <div>
+            <h3 class="font-semibold text-gray-900 mb-2">Hair Care</h3>
+            <ul class="space-y-1 text-gray-600 text-sm">
+              <li>Acne Patch</li>
+              <li>After Sun</li>
+              <li>Body Lotion</li>
+              <li>Body Scrub</li>
+              <li>Body Splash</li>
+              <li>Cleanser</li>
+              <li>Conditioner</li>
+              <li>Deodorant</li>
+            </ul>
+
+            <h3 class="font-semibold text-gray-900 mt-6 mb-2">Baby Care</h3>
+            <ul class="space-y-1 text-gray-600 text-sm">
+              <li>Acne Patch</li>
+              <li>After Sun</li>
+              <li>Body Lotion</li>
+              <li>Body Scrub</li>
+              <li>Body Splash</li>
+              <li>Cleanser</li>
+              <li>Conditioner</li>
+              <li>Deodorant</li>
+            </ul>
+          </div>
+
+          <!-- Column 3 -->
+          <div>
+            <h3 class="font-semibold text-gray-900 mb-2">Body Care</h3>
+            <ul class="space-y-1 text-gray-600 text-sm">
+              <li>Acne Patch</li>
+              <li>After Sun</li>
+              <li>Body Lotion</li>
+              <li>Body Scrub</li>
+              <li>Body Splash</li>
+              <li>Cleanser</li>
+              <li>Conditioner</li>
+              <li>Deodorant</li>
+            </ul>
+          </div>
+
+          <!-- Column 4 -->
+          <div>
+            <h3 class="font-semibold text-gray-900 mb-2">Skin Care</h3>
+            <ul class="space-y-1 text-gray-600 text-sm">
+              <li>Acne Patch</li>
+              <li>After Sun</li>
+              <li>Body Lotion</li>
+              <li>Body Scrub</li>
+              <li>Body Splash</li>
+              <li>Cleanser</li>
+              <li>Conditioner</li>
+              <li>Deodorant</li>
+              <li>Deodorant</li>
+              <li>Deodorant</li>
+              <li>Deodorant</li>
+              <li>Deodorant</li>
+            </ul>
+          </div>
+        </div>
+      </li>
+
+      <li><a href="/brands.html" class="hover:text-[#DE2677]">Brands</a></li>
+      <li><a href="/blog.html" class="hover:text-[#DE2677]">Blog</a></li>
+      <li><a href="/OrderTrack.html" class="hover:text-[#DE2677]">Order Track</a></li>
+    </ul>
+  </nav>
+
+  <!-- Mobile Menu Sidebar -->
+  <div 
+    v-show="mobileMenuOpen"
+    class="md:hidden fixed inset-0 bg-black bg-opacity-50 z-40"
+    @click="mobileMenuOpen = false"
+  ></div>
+
+  <div 
+    v-show="mobileMenuOpen"
+    class="md:hidden fixed top-0 left-0 h-full w-72 bg-white z-50 shadow-lg overflow-y-auto"
+  >
+    <div class="p-4 border-b border-gray-200 flex items-center justify-between">
+      <h3 class="font-semibold text-lg">Menu</h3>
+      <button @click="mobileMenuOpen = false" class="p-2 text-2xl">
+        <i class="ph-light ph-x"></i>
+      </button>
+    </div>
+
+    <nav class="p-4">
+      <ul class="space-y-4 text-sm font-medium">
+        <li><a href="#" class="block py-2 hover:text-[#DE2677]">Home</a></li>
+        
+        <li>
+          <button 
+            @click="mobileCategoryOpen = !mobileCategoryOpen"
+            class="w-full flex items-center justify-between py-2 hover:text-[#DE2677]"
+          >
+            <a href="/shop.html">Shop By Category</a>
+            <i :class="mobileCategoryOpen ? 'ph ph-caret-up' : 'ph ph-caret-down'"></i>
+          </button>
+          
+          <div v-show="mobileCategoryOpen" class="pl-4 mt-2 space-y-3 text-xs">
+            <div>
+              <h4 class="font-semibold text-gray-900 mb-1">Makeup</h4>
+              <ul class="space-y-1 text-gray-600">
+                <li>Acne Patch</li>
+                <li>After Sun</li>
+                <li>Body Lotion</li>
+              </ul>
+            </div>
+            <div>
+              <h4 class="font-semibold text-gray-900 mb-1">Hair Care</h4>
+              <ul class="space-y-1 text-gray-600">
+                <li>Shampoo</li>
+                <li>Conditioner</li>
+              </ul>
+            </div>
+            <div>
+              <h4 class="font-semibold text-gray-900 mb-1">Skin Care</h4>
+              <ul class="space-y-1 text-gray-600">
+                <li>Cleanser</li>
+                <li>Moisturizer</li>
+              </ul>
+            </div>
+          </div>
+        </li>
+
+        <li><a href="#" class="block py-2 hover:text-[#DE2677]">Brands</a></li>
+        <li><a href="#" class="block py-2 hover:text-[#DE2677]">Blog</a></li>
+        <li><a href="#" class="block py-2 hover:text-[#DE2677]">Order Track</a></li>
+      </ul>
+
+      <!-- Mobile Language Selector -->
+      <div class="mt-6 pt-6 border-t border-gray-200">
+        <button
+          @click="mobileLangOpen = !mobileLangOpen"
+          class="w-full flex items-center justify-between py-2"
+        >
+          <div class="flex items-center gap-2">
+            <img :src="selected.flag" class="w-5 h-5 rounded-md" />
+            <span class="font-bold text-sm">{{ selected.label }}</span>
+          </div>
+          <i :class="mobileLangOpen ? 'ph ph-caret-up' : 'ph ph-caret-down'"></i>
+        </button>
+
+        <div v-show="mobileLangOpen" class="mt-2 space-y-2">
+          <div
+            v-for="lang in languages"
+            :key="lang.code"
+            @click="selectLanguage(lang); mobileLangOpen = false"
+            class="flex items-center gap-2 px-3 py-2 hover:bg-gray-100 cursor-pointer rounded"
+          >
+            <img :src="lang.flag" class="w-5 h-5 rounded-md" />
+            <span class="text-sm">{{ lang.label }}</span>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </div>
+</header>
+
+      <!-- Main Container -->
+      <div class=" px-4 sm:px-6 md:px-12 lg:px-20 py-12">
+                <!-- Title -->
+        <h1 class="text-3xl md:text-4xl text-center font-bold text-gray-900 py-20 ">
+          {{ post.title }}
+        </h1>
+        <!--  Button & Date -->
+        <div class="flex items-center justify-start pb-6">
+          <a
+            href="#"
+            class="flex items-center gap-2 border border-[#E3E3E5] rounded-md p-1 text-gray-600 hover:text-gray-900 transition"
+          >
+            <i class="ph ph-share-network text-lg text-[#1F1F1F]"></i>
+            <span class="text-md text-[#1F1F1F]">Share</span>
+          </a>
+            <!-- Meta Info -->
+            <div class="flex items-center gap-4 text-sm text-[#8F8F8F] pl-2 ">
+              <div class="flex items-center ">
+                <i class="far fa-calendar"></i>
+                <span class="pl-2">{{ post.date }}</span>
+              </div>
+              <div class="flex items-center px-2 border-l border-[#8F8F8F] gap-1">
+                <i class="far fa-eye"></i>
+                <span>{{ post.views }} Views</span>
+              </div>
+            </div>
+        </div>
+
+        <!-- Featured Image -->
+        <div class="mb-8 rounded-lg overflow-hidden">
+          <img
+            :src="post.mainImage"
+            alt="Blog featured image"
+            class="w-full h-auto"
+          />
+        </div>
+
+        <!-- Content Sections -->
+        <div class="prose prose-lg max-w-none">
+          <!-- Section 1 -->
+          <div class="mb-8">
+            <p class="text-gray-700 leading-relaxed mb-4">
+              {{ post.content.section1 }}
+            </p>
+          </div>
+
+          <!-- Section 2 with Image -->
+          <div class="mb-8">
+            <div class="grid md:grid-cols-2 gap-6 mb-4">
+              <div>
+                <img
+                  :src="post.content.image2"
+                  alt="Section image"
+                  class="w-full h-64 object-cover rounded-lg"
+                />
+              </div>
+              <div class="flex flex-col justify-center">
+                <p class="text-gray-700 leading-relaxed">
+                  {{ post.content.section2 }}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 3 -->
+          <div class="mb-8">
+            <h2 class="text-2xl font-bold text-gray-900 mb-4">
+              {{ post.content.heading2 }}
+            </h2>
+            <p class="text-gray-700 leading-relaxed mb-4">
+              {{ post.content.section3 }}
+            </p>
+          </div>
+
+          <!-- Section 4 with Image -->
+          <div class="mb-8">
+            <div class="rounded-lg overflow-hidden mb-4">
+              <img
+                :src="post.content.image1"
+                alt="Content image"
+                class="w-full h-auto"
+              />
+            </div>
+          </div>
+
+          <!-- Section 5 -->
+          <div class="mb-8">
+            <h2 class="text-2xl font-bold text-gray-900 mb-4">
+              {{ post.content.heading3 }}
+            </h2>
+            <p class="text-gray-700 leading-relaxed mb-4">
+              {{ post.content.section4 }}
+            </p>
+          </div>
+
+          <!-- Section 6 -->
+          <div class="mb-8">
+            <h2 class="text-2xl font-bold text-gray-900 mb-4">
+              {{ post.content.heading4 }}
+            </h2>
+            <p class="text-gray-700 leading-relaxed">
+              {{ post.content.section5 }}
+            </p>
+          </div>
+        </div>
+
+        <!-- Suggested Articles -->
+        <div class="mt-16 mb-12">
+          <div class="flex items-center justify-between mb-6">
+            <h2 class="text-2xl font-bold text-gray-900">Suggested Articles</h2>
+            <button
+              class="w-10 h-10 flex items-center justify-center border border-gray-300 rounded-full hover:bg-gray-100 transition"
+            >
+              <i class="fas fa-arrow-right text-gray-600"></i>
+            </button>
+          
+
+
+        </div>
+         <!-- Blog Card -->
+               <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+        <div
+          v-for="suggestedPost in allPosts"
+          :key="suggestedPost.id"
+          class="bg-white border-b border-black overflow-hidden hover:shadow-lg transition-shadow duration-300"
+        >
+          <!-- Image -->
+          <div class="relative overflow-hidden">
+            <img
+              :src="suggestedPost.image"
+              :alt="suggestedPost.title"
+              class="w-full h-48 rounded-lg object-cover hover:scale-105 transition-transform duration-300"
+            >
+          </div>
+
+          <!-- Content -->
+          <div class="p-5">
+            <!-- Meta Info -->
+            <div class="flex items-center gap-4 text-xs text-[#8F8F8F] mb-3">
+              <div class="flex items-center ">
+                <i class="far fa-calendar"></i>
+                <span>{{ suggestedPost.date }}</span>
+              </div>
+              <div class="flex items-center px-2 border-l border-[#8F8F8F] gap-1">
+                <i class="far fa-eye"></i>
+                <span>{{ suggestedPost.views }} Views</span>
+              </div>
+            </div>
+
+            <!-- Title -->
+            <h3 class="text-xl font-semibold text-[#1F1F1F] mb-3 line-clamp-2 hover:text-gray-700 cursor-pointer">
+              {{ suggestedPost.title }}
+            </h3>
+
+            <!-- Excerpt -->
+            <p class="text-sm font-[Changa] text-[#8F8F8F] mb-4 line-clamp-3">
+              {{ suggestedPost.excerpt }}
+            </p>
+
+            <!-- Read More Button -->
+            <a
+              :href="suggestedPost.link"
+              class="inline-block text-pink-600 hover:text-pink-700 font-medium font-[Changa] flex justify-center text-sm transition-colors"
+            >
+              Read More
+            </a>
+          </div>
+        </div>
+               </div>
+      </div>
+
+      <!-- Comments Section -->
+      <div class="   mt-12">
+        <h2 class="text-2xl font-bold text-gray-900 mb-6">Comments</h2>
+
+        <!-- Existing Comments -->
+        <div class="space-y-6 mb-8">
+          <div
+            v-for="comment in comments"
+            :key="comment.id"
+            class="flex gap-4 items-center"
+          >
+            <img
+              :src="comment.avatar"
+              alt="User avatar"
+              class="w-12 h-12 rounded-md"
+            />
+            <div class="flex-1">
+                <h4 class="font-semibold text-gray-900">
+                  {{ comment.name }}
+                </h4>
+              <span class="text-xs text-gray-500">{{ comment.time }}</span>
+              <p class="text-gray-700 text-sm">{{ comment.text }}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Comment Form -->
+        <div class=" pt-6 w-[70%]">
+          <h3 class="text-lg font-semibold  text-gray-900 mb-4">
+            Add your comment
+          </h3>
+          <form @submit.prevent="submitComment">
+            <div class="space-y-4">
+              <div>
+                <label class="block text-md font-medium mb-2"
+                  >Your comment*</label
+                >
+                <textarea
+                  v-model="newComment.text"
+                  rows="4"
+                  placeholder="Write your comment here..."
+                  class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent resize-none"
+                  required
+                ></textarea>
+              </div>
+              <div>
+                <label class="block text-md font-medium mb-2"
+                  >Name*</label
+                >
+                <input
+                  v-model="newComment.name"
+                  type="text"
+                  placeholder="Your name"
+                  class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                  required
+                />
+              </div>
+              <div>
+                <label class="block text-md font-medium mb-2"
+                  >Email*</label
+                >
+                <input
+                  v-model="newComment.email"
+                  type="email"
+                  placeholder="Your email"
+                  class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                  required
+                />
+              </div>
+              
+              <div class="flex items-center gap-2">
+                <input
+                  v-model="newComment.subscribe"
+                  type="checkbox"
+                  id="subscribe"
+                  class="w-4 h-4 text-pink-600 border-gray-300 rounded focus:ring-pink-500"
+                />
+                <label for="subscribe" class="text-sm text-gray-700">
+                  Save name and email for next time
+                </label>
+              </div>
+              <button
+                type="submit"
+                class="bg-pink-600 hover:bg-pink-700 text-white px-8 py-3 rounded-lg font-medium transition"
+              >
+                Send
+              </button>
+            </div>
+          </form>
+        </div>
+      </div></div>
+
+      <!-- ====== Footer Section ====== -->
+      <footer class="bg-[#1F1F1F] text-white py-8 md:py-12">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-12 xl:px-20">
+          <div
+            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-8 md:gap-10"
+          >
+            <!-- Logo and Description -->
+            <div class="sm:col-span-2 lg:col-span-5">
+              <img
+                src="/imgs/logo2.png"
+                alt="logo"
+                class="w-[10rem] h-[6rem] pb-4 object-contain"
+              />
+              <p class="text-white text-base md:text-lg lg:w-[70%] mb-5">
+                Beauty is the ultimate destination for the most in-demand and
+                innovative beauty brands in Egypt.
+              </p>
+
+              <div class="flex space-x-4">
+                <a href="#" class="hover:text-[#DE2677] transition">
+                  <i class="fab fa-instagram text-lg"></i>
+                </a>
+                <a href="#" class="hover:text-[#DE2677] transition">
+                  <i class="fab fa-facebook-f text-lg"></i>
+                </a>
+                <a href="#" class="hover:text-[#DE2677] transition">
+                  <i class="fab fa-tiktok text-lg"></i>
+                </a>
+                <a href="#" class="hover:text-[#DE2677] transition">
+                  <i class="fab fa-youtube text-lg"></i>
+                </a>
+              </div>
+            </div>
+
+            <!-- About Beauty -->
+            <div class="lg:col-span-2">
+              <h3 class="font-semibold text-lg mb-3 md:mb-4">About Beauty</h3>
+              <ul class="space-y-3 md:space-y-5 text-gray-300 text-sm">
+                <li>
+                  <a
+                    href="#"
+                    class="hover:text-[#DE2677] text-white flex items-center gap-2 md:gap-4 text-base md:text-lg"
+                  >
+                    <span>›</span> About
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    class="hover:text-[#DE2677] text-white flex items-center gap-2 md:gap-4 text-base md:text-lg"
+                  >
+                    <span>›</span> Blog
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    class="hover:text-[#DE2677] text-white flex items-center gap-2 md:gap-4 text-base md:text-lg"
+                  >
+                    <span>›</span> Our partners
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    class="hover:text-[#DE2677] text-white flex items-center gap-2 md:gap-4 text-base md:text-lg"
+                  >
+                    <span>›</span> Privacy Policy
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            <!-- Customer Care -->
+            <div class="lg:col-span-2">
+              <h3 class="font-semibold text-lg mb-3 md:mb-4">Customer Care</h3>
+              <ul class="space-y-3 md:space-y-5 text-gray-300 text-sm">
+                <li>
+                  <a
+                    href="#"
+                    class="hover:text-[#DE2677] text-white flex items-center gap-2 md:gap-4 text-base md:text-lg"
+                  >
+                    <span>›</span> Contact
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    class="hover:text-[#DE2677] text-white flex items-center gap-2 md:gap-4 text-base md:text-lg"
+                  >
+                    <span>›</span> FAQs
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    class="hover:text-[#DE2677] text-white flex items-center gap-2 md:gap-4 text-base md:text-lg"
+                  >
+                    <span>›</span> Delivery
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    class="hover:text-[#DE2677] text-white flex items-center gap-2 md:gap-4 text-base md:text-lg"
+                  >
+                    <span>›</span> Refund Policy
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            <!-- Legal -->
+            <div class="lg:col-span-3">
+              <h3 class="font-semibold text-lg mb-3 md:mb-4">Legal</h3>
+              <ul class="space-y-3 md:space-y-5 text-gray-300 text-sm">
+                <li>
+                  <a
+                    href="#"
+                    class="hover:text-[#DE2677] text-white flex items-center gap-2 md:gap-4 text-base md:text-lg"
+                  >
+                    <span>›</span> Terms & Conditions
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </footer>
+
+      <!-- ====== Bottom Bar Section ====== -->
+      <div class="bg-white py-3">
+        <div
+          class="container md:px-[9rem] lg:px-[2rem] flex flex-col md:flex-row justify-between items-center gap-4"
+        >
+          <div class="flex gap-2">
+            <img src="/imgs/qumra.png" alt="qumra" />
+            <p class="text-gray-700 text-sm text-center md:text-right">
+              Powered by Qumra
+            </p>
+          </div>
+          <div class="flex items-center">
+            <img src="/imgs/pay.png" alt="Visa" class="h-6 object-contain" />
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- ====== Scripts ====== -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+      const { createApp } = Vue;
+
+      const allItems = [
+        "Body Lotion",
+        "Body Scrub",
+        "Body Splash",
+        "Cleanser",
+        "Conditioner",
+        "Deodorant",
+        "Makeup",
+        "Nail Care",
+        "Hair Care",
+        "Skin Care",
+        "Baby Care",
+        "L'Oreal",
+        "Nivea",
+        "Dove",
+        "Maybelline",
+        "After Sun",
+        "Acne Patch",
+      ];
+
+      createApp({
+        data() {
+          return {
+            open: false,
+            languages: [
+              { code: "en", label: "EN", flag: "imgs/flag-en.png" },
+              { code: "ar", label: "AR", flag: "imgs/flag-ar.png" },
+            ],
+            selected: { code: "en", label: "EN", flag: "imgs/flag-en.png" },
+            mobileMenuOpen: false,
+            mobileCategoryOpen: false,
+            mobileLangOpen: false,
+            allItems,
+            searchQuery: "",
+            filteredResults: [],
+            showResults: false,
+            post: {
+              title: "The Secret Behind The Skin Whiting Creams",
+              date: "December 15, 2023",
+              views: '15',
+              mainImage: "/imgs/blogdetail.jpg",
+              content: {
+                section1:
+                  "In today’s world, glowing and even-toned skin has become a symbol of confidence and care. Skin-whitening creams have gained massive popularity — but what’s really behind their magic? Let’s uncover the science, ingredients, and truth behind these creams that promise a radiant complexion.",
+                heading1: "Section Heading 1",
+                image1: "/imgs/blogdetail.jpg",
+                section2:
+                  "Star Ingredients That Make the Difference The power of these creams lies in their ingredients. Some of the most effective ones include:Niacinamide (Vitamin B3): Evens out skin tone and strengthens the skin barrier.Vitamin C: Brightens dull skin and fights damage caused by sun exposure.Licorice Extract: A natural lightener that soothes irritation and fades spots.Alpha Arbutin: A safe ingredient that helps reduce melanin production gently.These ingredients work together to enhance skin clarity while keeping it hydrated and healthy.",
+                heading2: "Section Heading 2",
+                section3:
+                  "Third section content here. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+                image2: "/imgs/blogdetail2.png",
+                heading3: "Section Heading 3",
+                section4:
+                  "Fourth section content. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+                heading4: "Section Heading 4",
+                section5:
+                  "Final section content. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.",
+              },
+            },
+      // Blog
+      allPosts: [
+        {
+          id: 1,
+          image: '/imgs/blog.jpg',
+          date: 'August 6, 2019',
+          views: '15',
+          title: 'Quick Tips to Choose The Makeup Looks for Your...',
+          excerpt: 'Ultricies leo integer malesuada nunc vel risus commodo viverra. Mauris ullamcorper mauris et enim. Ultricies integer malesuada et ut sit.',
+          link: '/blogdetail.html'
+        },
+        {
+          id: 2,
+          image: '/imgs/blog.jpg',
+          date: 'August 6, 2019',
+          views: '15',
+          title: 'Quick Tips to Choose The Makeup Looks for Your...',
+          excerpt: 'Ultricies leo integer malesuada nunc vel risus commodo viverra. Mauris ullamcorper mauris et enim. Ultricies integer malesuada et ut sit.',
+          link: '/blogdetail.html'
+        },
+        {
+          id: 3,
+          image: '/imgs/blog.jpg',
+          date: 'August 6, 2019',
+          views: '15',
+          title: 'Quick Tips to Choose The Makeup Looks for Your...',
+          excerpt: 'Ultricies leo integer malesuada nunc vel risus commodo viverra. Mauris ullamcorper mauris et enim. Ultricies integer malesuada et ut sit.',
+          link: '/blogdetail.html'
+        },
+            ],
+            comments: [
+              {
+                id: 1,
+                name: "John Doe",
+                time: "2 hours ago",
+                avatar: "imgs/customer.jpg",
+                text: "Great article! Very informative.",
+              },
+              {
+                id: 2,
+                name: "Jane Smith",
+                time: "1 day ago",
+                avatar: "imgs/customer.jpg",
+                text: "Thanks for sharing this information.",
+              },
+            ],
+            newComment: {
+              name: "",
+              email: "",
+              text: "",
+              subscribe: false,
+            },
+          };
+        },
+        mounted() {
+          document.addEventListener("click", (e) => {
+            if (!e.target.closest(".search-container")) {
+              this.showResults = false;
+            }
+            if (!e.target.closest(".relative")) {
+              this.open = false;
+            }
+          });
+        },
+        methods: {
+          selectLanguage(lang) {
+            this.selected = lang;
+            this.open = false;
+          },
+          handleSearchInput() {
+            const query = this.searchQuery.trim().toLowerCase();
+
+            if (query.length === 0) {
+              this.filteredResults = [];
+              this.showResults = false;
+              return;
+            }
+
+            this.filteredResults = this.allItems.filter((item) =>
+              item.toLowerCase().includes(query)
+            );
+
+            this.showResults = true;
+          },
+          selectResult(item) {
+            this.searchQuery = item;
+            this.showResults = false;
+          },
+          submitComment() {
+            this.comments.push({
+              id: this.comments.length + 1,
+              name: this.newComment.name,
+              time: "Just now",
+              avatar: "imgs/logo.png",
+              text: this.newComment.text,
+            });
+            this.newComment = {
+              name: "",
+              email: "",
+              text: "",
+              subscribe: false,
+            };
+          },
+        },
+      }).mount("#app");
+    </script>
+  </body>
+</html>

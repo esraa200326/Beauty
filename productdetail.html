@@ -1,0 +1,1486 @@
+<!DOCTYPE html>
+<html lang="ar" dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BeautyA - Product Details</title>
+
+    <!-- Scripts -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2"></script>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@400..700&display=swap"
+      rel="stylesheet"
+    />
+    <link href="https://fonts.googleapis.com/css2?family=Changa:wght@200..800&family=Reem+Kufi:wght@400..700&display=swap" rel="stylesheet">
+
+    <!-- Styles -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+
+    <style>
+      body {
+        font-family: "Reem Kufi";
+      }
+                .swiper-scrollbar {
+        height: 4px;
+        background: #e5e7eb;
+        border-radius: 10px;
+    }
+    
+    .swiper-scrollbar-drag {
+        background: #1F1F1F;
+        border-radius: 10px;
+        cursor: grab;
+    }
+    
+    .swiper-scrollbar-drag:active {
+        cursor: grabbing;
+    }
+      .swiper-button-next, .swiper-button-prev {
+        color: #DE2677;
+        background: white;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      }
+      .swiper-button-next:after, .swiper-button-prev:after {
+        font-size: 18px;
+      }
+    </style>
+  </head>
+
+  <body class="bg-white">
+    <div id="app">
+      <!-- Top Banner -->
+      <div
+        class="bg-[#1F1F1F] text-white text-center py-3 text-sm md:text-lg font-medium px-4"
+      >
+        FREE Shipping On Orders Above 1000 EGP !
+      </div>
+
+      <!-- Header -->
+      <header class="bg-white shadow-sm sticky top-0 z-50">
+  <div class="container mx-auto px-4 sm:px-8 lg:px-[100px]">
+    <!-- Top Bar -->
+    <div class="grid grid-cols-1 md:grid-cols-3 items-center gap-4 md:gap-8 py-4">
+
+
+      <!-- Logo -->
+      <div class="flex items-center justify-center md:justify-center">
+        <div class="w-35 h-30 md:w-30 md:h-30 flex items-center justify-center">
+          <img src="/imgs/logo.png" alt="logo" class="w-full h-full object-contain" />
+        </div>
+      </div>
+
+      <!-- Search (Desktop only in this row) -->
+      <div class="hidden md:flex justify-center order-3 md:order-2">
+        <div class="relative w-full">
+          <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
+            <i class="ph-light ph-magnifying-glass"></i>
+          </span>
+          <input
+  type="text"
+  v-model="searchQuery"
+  @input="handleSearchInput"
+  placeholder=""
+  class="w-full pl-10 pr-24 md:pr-32 py-2 md:py-3 border border-gray-300 rounded-full focus:outline-none focus:border-[#DE2677] text-sm md:text-base"
+/>
+          <button class="absolute top-0 right-0 h-full bg-[#DE2677] text-white px-3 md:px-6 rounded-full text-xs md:text-sm hover:bg-[#c01f66]">
+            Search here
+          </button>
+          <ul
+            v-if="showResults"
+            class="absolute z-50 mt-2 w-full bg-white border border-gray-200 rounded-lg shadow-lg max-h-60 overflow-y-auto text-sm"
+          >
+            <li
+              v-for="item in filteredResults"
+              :key="item"
+              class="p-2 hover:bg-pink-50 hover:text-[#DE2677] cursor-pointer"
+              @click="selectResult(item)"
+            >
+              {{ item }}
+            </li>
+            <li v-if="filteredResults.length === 0" class="p-2 text-gray-500 text-center">
+              No results found
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Icons & Language -->
+      <div class="flex items-center justify-center md:justify-end gap-2 md:gap-4 order-2 md:order-3">
+        <button
+          @click="mobileMenuOpen = !mobileMenuOpen"
+          class="lg:hidden p-2 text-2xl hover:text-[#DE2677]"
+        >
+          <i :class="mobileMenuOpen ? 'ph-light ph-x' : 'ph-light ph-list'"></i>
+        </button>
+        <a href="/cart.html" class="p-2 text-xl md:text-2xl hover:text-[#DE2677]">
+          <i class="ph-light ph-shopping-bag"></i>
+        </a>
+        <a href="/favorites.html" class="p-2 text-xl md:text-2xl hover:text-[#DE2677]">
+          <i class="ph-light ph-heart"></i>
+        </a>
+        <button class="p-2 text-xl md:text-2xl hover:text-[#DE2677]">
+  <i class="ph-light ph-user"></i>
+</button>
+        
+      
+
+
+        <!-- Language Dropdown -->
+        <div class="hidden md:block relative">
+          <button
+            @click="open = !open"
+            class="flex items-center gap-2 px-2 md:px-3 py-2"
+          >
+            <img :src="selected.flag" class="w-4 h-4 md:w-5 md:h-5 rounded-md" />
+            <span class="font-bold text-sm md:text-base">{{ selected.label }}</span>
+            <i class="ph ph-caret-down text-xs md:text-sm"></i>
+          </button>
+
+          <div
+            v-show="open"
+            class="absolute left-0 mt-1 bg-white border rounded shadow-lg w-full z-50"
+          >
+            <div
+              v-for="lang in languages"
+              :key="lang.code"
+              @click="selectLanguage(lang)"
+              class="flex items-center gap-2 px-3 py-2 hover:bg-gray-100 cursor-pointer"
+            >
+              <img :src="lang.flag" class="w-4 h-4 md:w-5 md:h-5 rounded-md" />
+              <span class="text-sm md:text-base">{{ lang.label }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Search (Below Logo) -->
+    <div class="md:hidden pb-4">
+      <div class="relative w-full">
+        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
+          <i class="ph-light ph-magnifying-glass"></i>
+        </span>
+        <input
+  type="text"
+  v-model="searchQuery"
+  @input="handleSearchInput"
+  placeholder=""
+  class="w-full pl-10 pr-24 py-2 border border-gray-300 rounded-full focus:outline-none focus:border-[#DE2677] text-sm"
+/>
+        <button class="absolute top-0 right-0 h-full bg-[#DE2677] text-white px-4 rounded-full text-xs hover:bg-[#c01f66]">
+          Search here
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Desktop Navigation - Border Full Width -->
+  <nav class="hidden md:block border-t border-gray-200 relative shadow-xl">
+    <ul
+      dir="ltr"
+      class="flex items-center justify-center space-x-4 md:space-x-8 py-4 text-xs md:text-sm font-medium whitespace-nowrap px-4"
+    >
+      <li><a href="/index.html" class="hover:text-[#DE2677]">Home</a></li>
+
+      <!-- Shop By Category -->
+      <li class="relative group">
+        <a href="/shop.html" class="hover:text-[#DE2677] flex items-center focus:outline-none">
+          Shop By Category
+          <span class="ml-1">▼</span>
+        </a>
+
+        <!-- Mega Menu -->
+        <div class="absolute left-1/2 transform -translate-x-1/2 top-full mt-2 hidden group-hover:grid grid-cols-4 gap-8 bg-white shadow-lg border border-gray-100 p-8 w-[900px] z-50">
+          <!-- Column 1 -->
+          <div>
+            <h3 class="font-semibold text-gray-900 mb-2">Makeup</h3>
+            <ul class="space-y-1 text-gray-600 text-sm">
+              <li>Acne Patch</li>
+              <li>After Sun</li>
+              <li>Body Lotion</li>
+              <li>Body Scrub</li>
+              <li>Body Splash</li>
+              <li>Cleanser</li>
+              <li>Conditioner</li>
+              <li>Deodorant</li>
+            </ul>
+
+            <h3 class="font-semibold text-gray-900 mt-6 mb-2">Nail Care</h3>
+            <ul class="space-y-1 text-gray-600 text-sm">
+              <li>Acne Patch</li>
+              <li>After Sun</li>
+              <li>Body Lotion</li>
+              <li>Body Scrub</li>
+              <li>Body Splash</li>
+              <li>Cleanser</li>
+              <li>Conditioner</li>
+              <li>Deodorant</li>
+            </ul>
+          </div>
+
+          <!-- Column 2 -->
+          <div>
+            <h3 class="font-semibold text-gray-900 mb-2">Hair Care</h3>
+            <ul class="space-y-1 text-gray-600 text-sm">
+              <li>Acne Patch</li>
+              <li>After Sun</li>
+              <li>Body Lotion</li>
+              <li>Body Scrub</li>
+              <li>Body Splash</li>
+              <li>Cleanser</li>
+              <li>Conditioner</li>
+              <li>Deodorant</li>
+            </ul>
+
+            <h3 class="font-semibold text-gray-900 mt-6 mb-2">Baby Care</h3>
+            <ul class="space-y-1 text-gray-600 text-sm">
+              <li>Acne Patch</li>
+              <li>After Sun</li>
+              <li>Body Lotion</li>
+              <li>Body Scrub</li>
+              <li>Body Splash</li>
+              <li>Cleanser</li>
+              <li>Conditioner</li>
+              <li>Deodorant</li>
+            </ul>
+          </div>
+
+          <!-- Column 3 -->
+          <div>
+            <h3 class="font-semibold text-gray-900 mb-2">Body Care</h3>
+            <ul class="space-y-1 text-gray-600 text-sm">
+              <li>Acne Patch</li>
+              <li>After Sun</li>
+              <li>Body Lotion</li>
+              <li>Body Scrub</li>
+              <li>Body Splash</li>
+              <li>Cleanser</li>
+              <li>Conditioner</li>
+              <li>Deodorant</li>
+            </ul>
+          </div>
+
+          <!-- Column 4 -->
+          <div>
+            <h3 class="font-semibold text-gray-900 mb-2">Skin Care</h3>
+            <ul class="space-y-1 text-gray-600 text-sm">
+              <li>Acne Patch</li>
+              <li>After Sun</li>
+              <li>Body Lotion</li>
+              <li>Body Scrub</li>
+              <li>Body Splash</li>
+              <li>Cleanser</li>
+              <li>Conditioner</li>
+              <li>Deodorant</li>
+              <li>Deodorant</li>
+              <li>Deodorant</li>
+              <li>Deodorant</li>
+              <li>Deodorant</li>
+            </ul>
+          </div>
+        </div>
+      </li>
+
+      <li><a href="/brands.html" class="hover:text-[#DE2677]">Brands</a></li>
+      <li><a href="/blog.html" class="hover:text-[#DE2677]">Blog</a></li>
+      <li><a href="/OrderTrack.html" class="hover:text-[#DE2677]">Order Track</a></li>
+    </ul>
+  </nav>
+
+  <!-- Mobile Menu Sidebar -->
+  <div 
+    v-show="mobileMenuOpen"
+    class="md:hidden fixed inset-0 bg-black bg-opacity-50 z-40"
+    @click="mobileMenuOpen = false"
+  ></div>
+
+  <div 
+    v-show="mobileMenuOpen"
+    class="md:hidden fixed top-0 left-0 h-full w-72 bg-white z-50 shadow-lg overflow-y-auto"
+  >
+    <div class="p-4 border-b border-gray-200 flex items-center justify-between">
+      <h3 class="font-semibold text-lg">Menu</h3>
+      <button @click="mobileMenuOpen = false" class="p-2 text-2xl">
+        <i class="ph-light ph-x"></i>
+      </button>
+    </div>
+
+    <nav class="p-4">
+      <ul class="space-y-4 text-sm font-medium">
+        <li><a href="#" class="block py-2 hover:text-[#DE2677]">Home</a></li>
+        
+        <li>
+          <button 
+            @click="mobileCategoryOpen = !mobileCategoryOpen"
+            class="w-full flex items-center justify-between py-2 hover:text-[#DE2677]"
+          >
+            <a href="/shop.html">Shop By Category</a>
+            <i :class="mobileCategoryOpen ? 'ph ph-caret-up' : 'ph ph-caret-down'"></i>
+          </button>
+          
+          <div v-show="mobileCategoryOpen" class="pl-4 mt-2 space-y-3 text-xs">
+            <div>
+              <h4 class="font-semibold text-gray-900 mb-1">Makeup</h4>
+              <ul class="space-y-1 text-gray-600">
+                <li>Acne Patch</li>
+                <li>After Sun</li>
+                <li>Body Lotion</li>
+              </ul>
+            </div>
+            <div>
+              <h4 class="font-semibold text-gray-900 mb-1">Hair Care</h4>
+              <ul class="space-y-1 text-gray-600">
+                <li>Shampoo</li>
+                <li>Conditioner</li>
+              </ul>
+            </div>
+            <div>
+              <h4 class="font-semibold text-gray-900 mb-1">Skin Care</h4>
+              <ul class="space-y-1 text-gray-600">
+                <li>Cleanser</li>
+                <li>Moisturizer</li>
+              </ul>
+            </div>
+          </div>
+        </li>
+
+        <li><a href="#" class="block py-2 hover:text-[#DE2677]">Brands</a></li>
+        <li><a href="#" class="block py-2 hover:text-[#DE2677]">Blog</a></li>
+        <li><a href="#" class="block py-2 hover:text-[#DE2677]">Order Track</a></li>
+      </ul>
+
+      <!-- Mobile Language Selector -->
+      <div class="mt-6 pt-6 border-t border-gray-200">
+        <button
+          @click="mobileLangOpen = !mobileLangOpen"
+          class="w-full flex items-center justify-between py-2"
+        >
+          <div class="flex items-center gap-2">
+            <img :src="selected.flag" class="w-5 h-5 rounded-md" />
+            <span class="font-bold text-sm">{{ selected.label }}</span>
+          </div>
+          <i :class="mobileLangOpen ? 'ph ph-caret-up' : 'ph ph-caret-down'"></i>
+        </button>
+
+        <div v-show="mobileLangOpen" class="mt-2 space-y-2">
+          <div
+            v-for="lang in languages"
+            :key="lang.code"
+            @click="selectLanguage(lang); mobileLangOpen = false"
+            class="flex items-center gap-2 px-3 py-2 hover:bg-gray-100 cursor-pointer rounded"
+          >
+            <img :src="lang.flag" class="w-5 h-5 rounded-md" />
+            <span class="text-sm">{{ lang.label }}</span>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </div>
+</header>
+
+               <!-- Product Details Content -->
+        <div class="container mx-auto px-4 sm:px-8 lg:px-[100px] py-8">
+            <!-- Breadcrumb -->
+            <div class="mb-6 pb-10">
+                <p class="text-sm text-gray-600 cursor-pointer">Home / Shop / <span class="font-semibold text-gray-900">{{ product.name }}</span></p>
+            </div>
+
+            <!-- Product Main Section -->
+                   <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            <!-- Left Side - Product Images -->
+            <div class="flex gap-4 items-center">
+                <!-- Thumbnail Images -->
+                <div class="flex flex-col gap-4 mb-6">
+                    <div v-for="(img, idx) in product.images" :key="idx" class="w-24 h-24 border-2" :class="selectedImage === idx ? 'border-pink-600' : 'border-gray-300'" @click="selectedImage = idx">
+                        <img :src="img" :alt="'Thumbnail ' + idx" class="w-full h-full object-cover cursor-pointer">
+                    </div>
+                </div>
+
+                <!-- Main Product Image -->
+                                <div class="relative w-full max-w-sm h-[30rem] bg-white rounded-lg overflow-hidden flex items-center justify-center mb-6">
+                    <img :src="product.images[selectedImage]" :alt="product.name" class="w-full h-full object-cover">
+                    
+                    <!-- Navigation Arrows -->
+                    <button @click="prevImage" class="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 border-2 border-gray-400 rounded-full flex items-center justify-center hover:bg-gray-200 z-10">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button @click="nextImage" class="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 border-2 border-gray-400 rounded-full flex items-center justify-center hover:bg-gray-200 z-10">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Right Side - Product Info -->
+            <div class="flex flex-col justify-start">
+                <!-- Title -->
+                <h1 class="text-3xl font-bold text-black mb-4">{{ product.name }}</h1>
+
+                <!-- Rating -->
+                <div class="flex items-center gap-2 mb-6">
+                    <div class="flex gap-1">
+                        <i v-for="i in 5" :key="i" class="fas fa-star text-yellow-400"></i>
+                    </div>
+                    <span class="text-gray-700">{{ product.reviews }} Reviews</span>
+                </div>
+
+                <!-- Price -->
+                <div class="flex items-center gap-4 mb-6">
+                    <span class="text-4xl font-bold text-black">EGP {{ product.price }}</span>
+                    <span class="text-xl text-gray-400 line-through">EGP{{ product.originalPrice }}</span>
+                </div>
+
+                <!-- Description -->
+                <p class="text-gray-600 mb-8 leading-relaxed">{{ product.description }}</p>
+
+                <!-- Size Selection -->
+                <div class="mb-8">
+                    <h3 class="text-lg font-bold text-black mb-4">Size:</h3>
+                    <div class="flex gap-4">
+                        <button v-for="size in product.sizes" :key="size" @click="selectedSize = size" class="px-6 py-3 border-2 rounded-lg font-semibold transition" :class="selectedSize === size ? 'border-pink-600 text-pink-600' : 'border-gray-300 text-gray-700 hover:border-gray-400'">
+                            {{ size }}
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Vendor -->
+                <div class="mb-8">
+                    <span class="text-gray-700 font-semibold">Vendor: <span class="text-black">{{ product.vendor }}</span></span>
+                </div>
+
+                <!-- Quantity & Add to Cart -->
+                <div class="flex gap-4">
+                    <div class="flex items-center border-2 border-gray-300 rounded-lg px-4 py-3">
+                        <button @click="quantity > 1 ? quantity-- : null" class="text-gray-600 hover:text-gray-800 text-xl">−</button>
+                        <input v-model.number="quantity" type="number" class="w-16 text-center font-bold border-0 outline-none" min="1">
+                        <button @click="quantity++" class="text-gray-600 hover:text-gray-800 text-xl">+</button>
+                    </div>
+                    <button class="flex-1 bg-pink-600 hover:bg-pink-700 text-white font-bold py-3 px-6 rounded-lg transition">
+                        ADD TO CART
+                    </button>
+                </div>
+            </div>
+        </div>
+        </div>
+
+                   <!-- Tabs Section -->
+        <div class="bg-[#E3E3E53D] my-4 rounded-lg p-8">
+            <!-- Tab Buttons -->
+            <div class="flex justify-center gap-4 mb-8 ">
+                <button 
+                    v-for="tab in tabs" 
+                    :key="tab"
+                    @click="activeTab = tab"
+                    :class="activeTab === tab ? 'border border-pink-600 text-pink-600' : 'text-gray-700 border-gray-300'"
+                    class="px-6 py-3 font-semibold hover:text-pink-600 transition border-2 rounded-lg">
+                    {{ tab }}
+                </button>
+            </div>
+
+            <!-- How to use Tab -->
+            <div v-show="activeTab === 'How to use'">
+                <p class="text-gray-600">1. Apply a small amount to clean, dry skin</p>
+            </div>
+
+            <!-- Ingredients Tab -->
+            <div v-show="activeTab === 'Ingredients'">
+                <p class="text-gray-600">Water, Glycerin, Vitamin C, Niacinamide</p>
+            </div>
+
+            <!-- Reviews Tab -->
+            <div v-show="activeTab === 'Reviews'" class="space-y-6">
+                <!-- Review Item 1 -->
+                <div class="flex gap-4 pb-6 border-b border-gray-200">
+                    <img src="/imgs/customer.jpg" 
+                         class="w-16 h-16 rounded-full object-cover flex-shrink-0" />
+                    <div class="flex-1">
+                        <div class="flex items-center justify-between mb-2">
+                            <h4 class="font-bold text-black">Ramy ahmed</h4>
+                            <span class="text-sm text-gray-500">12/8/2024</span>
+                        </div>
+                        <div class="flex gap-1 mb-3">
+                            <i v-for="n in 5" :key="n" class="fas fa-star text-yellow-400"></i>
+                        </div>
+                        <p class="text-gray-600 text-sm leading-relaxed">
+                            This was such an informative read! I finally understand how whitening creams actually work without damaging the skin. Loved the tips about ingredients — especially Vitamin C and niacinamide!
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Review Item 2 -->
+                <div class="flex gap-4 pb-6 border-b border-gray-200">
+                    <img src="/imgs/customer.jpg"
+                         class="w-16 h-16 rounded-full object-cover flex-shrink-0" />
+                    <div class="flex-1">
+                        <div class="flex items-center justify-between mb-2">
+                            <h4 class="font-bold text-black">Sara ohmed</h4>
+                            <span class="text-sm text-gray-500">12/8/2024</span>
+                        </div>
+                        <div class="flex gap-1 mb-3">
+                            <i v-for="n in 5" :key="n" class="fas fa-star text-yellow-400"></i>
+                        </div>
+                        <p class="text-gray-600 text-sm leading-relaxed">
+                            This was such an informative read! I finally understand how whitening creams actually work without damaging the skin. Loved the tips about ingredients — especially Vitamin C and niacinamide!
+                        </p>
+                    </div>
+                    
+                </div>
+                <!-- Your Review Section -->
+            <div class="mt-12 pt-12 border-t border-gray-200">
+                <h3 class="text-2xl font-bold text-black mb-2">Your Review</h3>
+                <p class="text-gray-600 mb-8">Share your opinion about the product and help others make better decisions.</p>
+
+                <!-- Rating Stars -->
+                <div class="mb-8">
+                    <label class="block font-bold text-black mb-4">Your Rating:</label>
+                    <div class="flex gap-3">
+                        <button v-for="n in 5" :key="n" @click="rating = n" class="text-3xl transition">
+                            <i :class="n <= rating ? 'fas fa-star text-yellow-400' : 'far fa-star text-gray-300'" class="hover:text-yellow-400"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Comment -->
+                <div class="mb-8">
+                    <label class="block font-bold text-black mb-3">Your comment*</label>
+                    <textarea v-model="comment" placeholder="Write your comments..." class="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:border-pink-600 resize-none" rows="5"></textarea>
+                </div>
+
+                <!-- Name -->
+                <div class="mb-8">
+                    <label class="block font-bold text-black mb-3">Name*</label>
+                    <input v-model="name" type="text" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-pink-600">
+                </div>
+
+                <!-- Email -->
+                <div class="mb-6">
+                    <label class="block font-bold text-black mb-3">Email*</label>
+                    <input v-model="email" type="email" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-pink-600">
+                </div>
+
+                <!-- Checkbox -->
+                <div class="mb-8 flex items-center gap-2">
+                    <input v-model="saveInfo" type="checkbox" class="w-4 h-4">
+                    <label class="text-sm text-gray-600">Save name and email for next time</label>
+                </div>
+
+                <!-- Submit Button -->
+                <button class="bg-pink-600 hover:bg-pink-700 text-white font-bold py-3 px-8 rounded-lg transition w-full md:w-auto">
+                    Send
+                </button>
+            </div>
+            </div>
+
+            
+        </div>
+
+
+        <!-- Frequently Bought Together -->
+<div class="container mx-auto px-4 sm:px-6 md:px-12 lg:px-24 xl:px-32 py-16">
+              <div class="mb-8">
+                <h2 class="text-2xl md:text-3xl font-bold mb-2">Frequently Bought Together</h2>
+                <p class="text-gray-600 text-lg">Save 5% by purchasing this bundle</p>
+            </div>
+
+            <div class="bg-white border border-gray-200 rounded-lg p-8">
+                <div class="grid items-center grid-cols-1 md:grid-cols-2 gap-12">
+                    <!-- Left Side - Products Images -->
+                    <div class="flex items-center justify-center gap-6 flex-wrap">
+                        <template v-for="(product, index) in products">
+                            <img 
+                                :key="`img-${product.id}`"
+                                :src="product.image" 
+                                :alt="product.name"
+                                class="w-32 h-60 object-cover">
+                            <span v-if="index < products.length - 1" :key="`plus-${index}`" class="text-4xl font-light text-gray-400">+</span>
+                        </template>
+                    </div>
+
+                    <div class="container mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-24 py-16">
+
+                    <div class="flex flex-col justify-between">
+                        <!-- Products List -->
+                        <div class="space-y-4 mb-8">
+                            <label v-for="product in products" 
+                                   :key="product.id"
+                                   class="flex items-start gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer">
+                                <input 
+                                    type="checkbox"
+                                    v-model="product.selected"
+                                    class="w-5 h-5 text-[#DE2677] rounded mt-1"
+                                />
+                                <div class="flex-1">
+                                    <p class="text-sm font-semibold text-black">{{ product.name }}</p>
+                                    <div class="flex items-center gap-2 mt-1">
+                                        <span class="text-sm">{{ product.size }}</span>
+                                        <span class="text-[#DE2677] font-bold">EGP {{ product.price }}</span>
+                                    </div>
+                                </div>
+                            </label>
+
+                        <!-- Price and Button -->
+                        <div class="border-t pt-4">
+                            <div class="flex items-baseline gap-2 mb-6">
+                                <span class="text-gray-600">Total price:</span>
+                                <span class="text-gray-500 line-through text-sm">EGP {{ originalTotal }}</span>
+                                <span class="text-2xl font-bold text-[#DE2677]">EGP {{ totalPrice }}</span>
+                            </div>
+                            <button 
+                                :disabled="selectedCount === 0"
+                                :class="['w-full py-3 rounded-lg font-semibold text-white transition', 
+                                         selectedCount === 0 ? 'bg-gray-400 cursor-not-allowed' : 'bg-black hover:bg-gray-800']"
+                            >
+                                Add Selected To Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
+
+        <!-- Before & After Section -->
+        <div class="container mx-auto px-4 py-16">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <!-- Left Side - Content -->
+                <div>
+                    <h2 class="text-3xl font-bold text-black mb-6">Before & After</h2>
+                    <h3 class="text-xl font-bold text-black mb-8">When the acne disappear?</h3>
+
+                    <div class="space-y-4">
+                        <button v-for="item in timeline" :key="item.id" 
+                                @click="expandedItem = expandedItem === item.id ? null : item.id" 
+                                class="w-full text-left">
+                            <div class="flex items-center gap-4 p-4 bg-white rounded-lg hover:shadow-md transition border border-gray-200">
+                                <div class="w-12 h-12 rounded-full bg-[#DE2677] flex items-center justify-center text-white text-xl flex-shrink-0">
+                                    <i :class="['fas', expandedItem === item.id ? 'fa-minus' : 'fa-plus']"></i>
+                                </div>
+                                <span class="text-lg font-bold text-black">{{ item.title }}</span>
+                            </div>
+                            <div v-show="expandedItem === item.id" class="mt-2 p-4 bg-gray-50 rounded-lg text-gray-700">
+                                {{ item.description }}
+                            </div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Right Side - Before/After Slider -->
+                <div class="flex justify-center">
+                    <div class="relative w-64 h-64">
+                        <!-- Circular Container -->
+                        <div class="relative w-full h-full rounded-full overflow-hidden border-4 border-[#DE2677]">
+                            <!-- Before Image (Right side) -->
+                            <div class="absolute inset-0 w-1/2 right-0 overflow-hidden bg-gray-200">
+                                <div class="w-full h-full flex items-center justify-center text-gray-400">Before</div>
+                            </div>
+
+                            <!-- After Image (Left side) -->
+                            <div class="absolute inset-0 overflow-hidden bg-green-50" :style="{width: sliderPosition + '%'}">
+                                <div class="w-full h-full flex items-center justify-center text-green-600">After</div>
+                            </div>
+                        </div>
+
+                        <!-- Center Divider -->
+                        <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                            <div class="w-1 h-full bg-[#DE2677]" :style="{left: sliderPosition + '%', transform: 'translateX(-50%)'}"></div>
+                        </div>
+
+                        <!-- Navigation Arrows -->
+                        <button @click="decreaseSlider" class="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-auto z-10">
+                            <div class="w-10 h-10 rounded-full bg-[#DE2677] text-white flex items-center justify-center hover:bg-[#c01f66] transition">
+                                <i class="fas fa-chevron-left"></i>
+                            </div>
+                        </button>
+                        <button @click="increaseSlider" class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-auto z-10">
+                            <div class="w-10 h-10 rounded-full bg-[#DE2677] text-white flex items-center justify-center hover:bg-[#c01f66] transition">
+                                <i class="fas fa-chevron-right"></i>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
+
+
+        <!-- FAQ Section -->  
+    <div class="container mx-auto px-4 sm:px-6 md:px-12 lg:px-24 xl:px-32 py-16">
+
+            <!-- Title -->
+            <h2 class="text-2xl md:text-3xl font-bold mb-12">Common questions about product</h2>
+
+            <!-- FAQ Items -->
+            <div class="space-y-4 ">
+                <!-- FAQ Item 1 -->
+                <div 
+                    @click="expandedFAQ = expandedFAQ === 0 ? null : 0"
+                    class="border-2 rounded-lg p-6 cursor-pointer transition"
+                    :class="expandedFAQ === 0 ? 'border-[#DE2677]' : 'border-gray-300 bg-white hover:border-gray-400'"
+                >
+                    <div class="flex items-center justify-between">
+                        <h3 class="font-bold text-lg text-black">Is the Dermactive Act: Clear Gentle Cleansing Gel suitable for sensitive skin?</h3>
+                        <i :class="['ph-light transition-transform', expandedFAQ === 0 ? 'ph-minus' : 'ph-plus', 'text-2xl', expandedFAQ === 0 ? 'text-[#DE2677]' : 'text-gray-400']"></i>
+                    </div>
+                    <div v-show="expandedFAQ === 0" class="mt-4 text-gray-700 leading-relaxed">
+                        Yes! It's specially formulated to be non-drying and soap-free, making it gentle enough for sensitive and combination skin types.
+                    </div>
+                </div>
+
+                <!-- FAQ Item 2 -->
+                <div 
+                    @click="expandedFAQ = expandedFAQ === 1 ? null : 1"
+                    class="border-2 rounded-lg p-6 cursor-pointer transition"
+                    :class="expandedFAQ === 1 ? 'border-[#DE2677]' : 'border-gray-300 bg-white hover:border-gray-400'"
+                >
+                    <div class="flex items-center justify-between">
+                        <h3 class="font-bold text-lg text-black">Can I use this cleansing gel twice a day?</h3>
+                        <i :class="['ph-light transition-transform', expandedFAQ === 1 ? 'ph-minus' : 'ph-plus', 'text-2xl', expandedFAQ === 1 ? 'text-[#DE2677]' : 'text-gray-400']"></i>
+                    </div>
+                    <div v-show="expandedFAQ === 1" class="mt-4 text-gray-700 leading-relaxed">
+                        Yes, this product is gentle enough to be used twice daily - once in the morning and once in the evening as part of your skincare routine.
+                    </div>
+                </div>
+
+                <!-- FAQ Item 3 -->
+                <div 
+                    @click="expandedFAQ = expandedFAQ === 2 ? null : 2"
+                    class="border-2 rounded-lg p-6 cursor-pointer transition"
+                    :class="expandedFAQ === 2 ? 'border-[#DE2677]' : 'border-gray-300 bg-white hover:border-gray-400'"
+                >
+                    <div class="flex items-center justify-between">
+                        <h3 class="font-bold text-lg text-black">Does it help with acne or oily skin?</h3>
+                        <i :class="['ph-light transition-transform', expandedFAQ === 2 ? 'ph-minus' : 'ph-plus', 'text-2xl', expandedFAQ === 2 ? 'text-[#DE2677]' : 'text-gray-400']"></i>
+                    </div>
+                    <div v-show="expandedFAQ === 2" class="mt-4 text-gray-700 leading-relaxed">
+                        Absolutely! The formula is designed to effectively cleanse oily and acne-prone skin without disrupting the skin barrier. It helps control excess oil production while being gentle on the skin.
+                    </div>
+                </div>
+
+                <!-- FAQ Item 4 -->
+                <div 
+                    @click="expandedFAQ = expandedFAQ === 3 ? null : 3"
+                    class="border-2 rounded-lg p-6 cursor-pointer transition"
+                    :class="expandedFAQ === 3 ? 'border-[#DE2677]' : 'border-gray-300 bg-white hover:border-gray-400'"
+                >
+                    <div class="flex items-center justify-between">
+                        <h3 class="font-bold text-lg text-black">Can I use it with other skincare products?</h3>
+                        <i :class="['ph-light transition-transform', expandedFAQ === 3 ? 'ph-minus' : 'ph-plus', 'text-2xl', expandedFAQ === 3 ? 'text-[#DE2677]' : 'text-gray-400']"></i>
+                    </div>
+                    <div v-show="expandedFAQ === 3" class="mt-4 text-gray-700 leading-relaxed">
+                        Yes! This cleansing gel works well with most skincare products. Use it as the first step in your routine, followed by toners, serums, and moisturizers. It provides a clean base for all your other skincare products to work effectively.
+                    </div>
+                </div>
+
+                <!-- FAQ Item 5 -->
+                <div 
+                    @click="expandedFAQ = expandedFAQ === 4 ? null : 4"
+                    class="border-2 rounded-lg p-6 cursor-pointer transition"
+                    :class="expandedFAQ === 4 ? 'border-[#DE2677]' : 'border-gray-300 bg-white hover:border-gray-400'"
+                >
+                    <div class="flex items-center justify-between">
+                        <h3 class="font-bold text-lg text-black">How long does one bottle last?</h3>
+                        <i :class="['ph-light transition-transform', expandedFAQ === 4 ? 'ph-minus' : 'ph-plus', 'text-2xl', expandedFAQ === 4 ? 'text-[#DE2677]' : 'text-gray-400']"></i>
+                    </div>
+                    <div v-show="expandedFAQ === 4" class="mt-4 text-gray-700 leading-relaxed">
+                        A typical bottle can last 2-3 months with daily twice-a-day use, depending on the amount you use each time. A little goes a long way, so just apply a small amount to damp skin.
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
+
+        <!-- Best Sellers Section -->
+<section class="container mx-auto px-4 md:px-8 lg:px-16 py-8 md:py-12">
+    <!-- Section Header -->
+    <div class="flex items-center justify-between mb-6">
+        <div class="flex items-center gap-3">
+            <h2 class="text-2xl md:text-3xl font-bold text-[#000000]">Best Sellers</h2>
+        </div>
+        
+        <!-- Navigation Arrows -->
+        <div class="flex gap-2">
+            <button class="swiper-button-prev-bestsellers w-10 h-10 flex items-center justify-center hover:text-[#DE2677] transition">
+                <i class="ph-light ph-arrow-circle-left text-4xl"></i>
+            </button>
+            <button class="swiper-button-next-bestsellers w-10 h-10 flex items-center justify-center hover:text-[#DE2677] transition">
+                <i class="ph-light ph-arrow-circle-right text-4xl"></i>
+            </button>
+        </div>
+    </div>
+          <div class="swiper bestSellersSwiper">
+        <div class="swiper-wrapper">
+            
+            <div class="swiper-slide">
+    <div class="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition group">
+        <!-- Discount Badge -->
+        <div class="relative flex items-center">
+            <span class="absolute top-3 left-3 bg-[#DE2677] text-white text-xs font-bold px-3 py-1 rounded z-10">
+                60% OFF
+            </span>
+            <span class="absolute top-3 right-3 text-xl px-3 py-1 z-10">
+                <i class="ph-bold ph-heart"></i>
+            </span>
+            <img src="imgs/product1.png" alt="Product" class="w-full h-64 object-cover group-hover:scale-105 transition duration-300" />
+            <div class="px-4">
+            <button class="absolute bottom-3 left-1/2 -translate-x-1/2 w-[90%] bg-[#DE2677] text-white py-2 rounded-md font-semibold text-sm hover:bg-[#c01f66] transition-all duration-300 translate-y-full opacity-0 group-hover:translate-y-0 group-hover:opacity-100 shadow-md">
+                Add to Cart
+            </button></div>
+        </div>
+        
+        <!-- Product Info -->
+        <div class="p-4">
+            <p class="text-md text-gray-500 mb-1">Medicube</p>
+            <h3 class="text-base font-bold text-black mb-2 line-clamp-2">
+                Collagen Jelly Cream
+            </h3>
+            <div class="flex items-center gap-2">
+                <span class="text-xs text-black line-through">EGP 1,899.00</span>
+                <span class="text-lg font-bold text-[#DE2677]">EGP 1300.00</span>
+            </div>
+        </div>
+    </div>
+</div>
+            <div class="swiper-slide">
+    <div class="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition group">
+        <!-- Discount Badge -->
+        <div class="relative flex items-center">
+            <span class="absolute top-3 left-3 bg-[#DE2677] text-white text-xs font-bold px-3 py-1 rounded z-10">
+                60% OFF
+            </span>
+            <span class="absolute top-3 right-3 text-xl px-3 py-1 z-10">
+                <i class="ph-bold ph-heart"></i>
+            </span>
+            <img src="imgs/product2.png" alt="Product" class="w-full h-64 object-cover group-hover:scale-105 transition duration-300" />
+            <div class="px-4">
+            <button class="absolute bottom-3 left-1/2 -translate-x-1/2 w-[90%] bg-[#DE2677] text-white py-2 rounded-md font-semibold text-sm hover:bg-[#c01f66] transition-all duration-300 translate-y-full opacity-0 group-hover:translate-y-0 group-hover:opacity-100 shadow-md">
+                Add to Cart
+            </button></div>
+        </div>
+        
+        <!-- Product Info -->
+        <div class="p-4">
+            <p class="text-md text-gray-500 mb-1">Medicube</p>
+            <h3 class="text-base font-bold text-black mb-2 line-clamp-2">
+                Collagen Jelly Cream
+            </h3>
+            <div class="flex items-center gap-2">
+                <span class="text-xs text-black line-through">EGP 1,899.00</span>
+                <span class="text-lg font-bold text-[#DE2677]">EGP 1300.00</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+            <div class="swiper-slide">
+    <div class="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition group">
+        <!-- Discount Badge -->
+        <div class="relative flex items-center">
+            <span class="absolute top-3 left-3 bg-[#DE2677] text-white text-xs font-bold px-3 py-1 rounded z-10">
+                60% OFF
+            </span>
+            <span class="absolute top-3 right-3 text-xl px-3 py-1 z-10">
+                <i class="ph-bold ph-heart"></i>
+            </span>
+            <img src="imgs/product3.png" alt="Product" class="w-full h-64 object-cover group-hover:scale-105 transition duration-300" />
+            <div class="px-4">
+            <button class="absolute bottom-3 left-1/2 -translate-x-1/2 w-[90%] bg-[#DE2677] text-white py-2 rounded-md font-semibold text-sm hover:bg-[#c01f66] transition-all duration-300 translate-y-full opacity-0 group-hover:translate-y-0 group-hover:opacity-100 shadow-md">
+                Add to Cart
+            </button></div>
+        </div>
+        
+        <!-- Product Info -->
+        <div class="p-4">
+            <p class="text-md text-gray-500 mb-1">Medicube</p>
+            <h3 class="text-base font-bold text-black mb-2 line-clamp-2">
+                Collagen Jelly Cream
+            </h3>
+            <div class="flex items-center gap-2">
+                <span class="text-xs text-black line-through">EGP 1,899.00</span>
+                <span class="text-lg font-bold text-[#DE2677]">EGP 1300.00</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+            <div class="swiper-slide">
+    <div class="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition group">
+        <!-- Discount Badge -->
+        <div class="relative flex items-center">
+            <span class="absolute top-3 left-3 bg-[#DE2677] text-white text-xs font-bold px-3 py-1 rounded z-10">
+                60% OFF
+            </span>
+            <span class="absolute top-3 right-3 text-xl px-3 py-1 z-10">
+                <i class="ph-bold ph-heart"></i>
+            </span>
+            <img src="imgs/product4.png" alt="Product" class="w-full h-64 object-cover group-hover:scale-105 transition duration-300" />
+            <div class="px-4">
+            <button class="absolute bottom-3 left-1/2 -translate-x-1/2 w-[90%] bg-[#DE2677] text-white py-2 rounded-md font-semibold text-sm hover:bg-[#c01f66] transition-all duration-300 translate-y-full opacity-0 group-hover:translate-y-0 group-hover:opacity-100 shadow-md">
+                Add to Cart
+            </button></div>
+        </div>
+        
+        <!-- Product Info -->
+        <div class="p-4">
+            <p class="text-md text-gray-500 mb-1">Medicube</p>
+            <h3 class="text-base font-bold text-black mb-2 line-clamp-2">
+                Collagen Jelly Cream
+            </h3>
+            <div class="flex items-center gap-2">
+                <span class="text-xs text-black line-through">EGP 1,899.00</span>
+                <span class="text-lg font-bold text-[#DE2677]">EGP 1300.00</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="swiper-slide">
+    <div class="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition group">
+        <!-- Discount Badge -->
+        <div class="relative flex items-center">
+            <span class="absolute top-3 left-3 bg-[#DE2677] text-white text-xs font-bold px-3 py-1 rounded z-10">
+                60% OFF
+            </span>
+            <span class="absolute top-3 right-3 text-xl px-3 py-1 z-10">
+                <i class="ph-bold ph-heart"></i>
+            </span>
+            <img src="imgs/product5.png" alt="Product" class="w-full h-64 object-cover group-hover:scale-105 transition duration-300" />
+            <div class="px-4">
+            <button class="absolute bottom-3 left-1/2 -translate-x-1/2 w-[90%] bg-[#DE2677] text-white py-2 rounded-md font-semibold text-sm hover:bg-[#c01f66] transition-all duration-300 translate-y-full opacity-0 group-hover:translate-y-0 group-hover:opacity-100 shadow-md">
+                Add to Cart
+            </button></div>
+        </div>
+        
+        <!-- Product Info -->
+        <div class="p-4">
+            <p class="text-md text-gray-500 mb-1">Medicube</p>
+            <h3 class="text-base font-bold text-black mb-2 line-clamp-2">
+                Collagen Jelly Cream
+            </h3>
+            <div class="flex items-center gap-2">
+                <span class="text-xs text-black line-through">EGP 1,899.00</span>
+                <span class="text-lg font-bold text-[#DE2677]">EGP 1300.00</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+            <div class="swiper-slide">
+    <div class="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition group">
+        <!-- Discount Badge -->
+        <div class="relative flex items-center">
+            <span class="absolute top-3 left-3 bg-[#DE2677] text-white text-xs font-bold px-3 py-1 rounded z-10">
+                60% OFF
+            </span>
+            <span class="absolute top-3 right-3 text-xl px-3 py-1 z-10">
+                <i class="ph-bold ph-heart"></i>
+            </span>
+            <img src="imgs/product1.png" alt="Product" class="w-full h-64 object-cover group-hover:scale-105 transition duration-300" />
+            <div class="px-4">
+            <button class="absolute bottom-3 left-1/2 -translate-x-1/2 w-[90%] bg-[#DE2677] text-white py-2 rounded-md font-semibold text-sm hover:bg-[#c01f66] transition-all duration-300 translate-y-full opacity-0 group-hover:translate-y-0 group-hover:opacity-100 shadow-md">
+                Add to Cart
+            </button></div>
+        </div>
+        
+        <!-- Product Info -->
+        <div class="p-4">
+            <p class="text-md text-gray-500 mb-1">Medicube</p>
+            <h3 class="text-base font-bold text-black mb-2 line-clamp-2">
+                Collagen Jelly Cream
+            </h3>
+            <div class="flex items-center gap-2">
+                <span class="text-xs text-black line-through">EGP 1,899.00</span>
+                <span class="text-lg font-bold text-[#DE2677]">EGP 1300.00</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+            <div class="swiper-slide">
+    <div class="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition group">
+        <!-- Discount Badge -->
+        <div class="relative flex items-center">
+            <span class="absolute top-3 left-3 bg-[#DE2677] text-white text-xs font-bold px-3 py-1 rounded z-10">
+                60% OFF
+            </span>
+            <span class="absolute top-3 right-3 text-xl px-3 py-1 z-10">
+                <i class="ph-bold ph-heart"></i>
+            </span>
+            <img src="imgs/product2.png" alt="Product" class="w-full h-64 object-cover group-hover:scale-105 transition duration-300" />
+            <div class="px-4">
+            <button class="absolute bottom-3 left-1/2 -translate-x-1/2 w-[90%] bg-[#DE2677] text-white py-2 rounded-md font-semibold text-sm hover:bg-[#c01f66] transition-all duration-300 translate-y-full opacity-0 group-hover:translate-y-0 group-hover:opacity-100 shadow-md">
+                Add to Cart
+            </button></div>
+        </div>
+        
+        <!-- Product Info -->
+        <div class="p-4">
+            <p class="text-md text-gray-500 mb-1">Medicube</p>
+            <h3 class="text-base font-bold text-black mb-2 line-clamp-2">
+                Collagen Jelly Cream
+            </h3>
+            <div class="flex items-center gap-2">
+                <span class="text-xs text-black line-through">EGP 1,899.00</span>
+                <span class="text-lg font-bold text-[#DE2677]">EGP 1300.00</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+            <div class="swiper-slide">
+    <div class="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition group">
+        <!-- Discount Badge -->
+        <div class="relative flex items-center">
+            <span class="absolute top-3 left-3 bg-[#DE2677] text-white text-xs font-bold px-3 py-1 rounded z-10">
+                60% OFF
+            </span>
+            <span class="absolute top-3 right-3 text-xl px-3 py-1 z-10">
+                <i class="ph-bold ph-heart"></i>
+            </span>
+            <img src="imgs/product3.png" alt="Product" class="w-full h-64 object-cover group-hover:scale-105 transition duration-300" />
+            <div class="px-4">
+            <button class="absolute bottom-3 left-1/2 -translate-x-1/2 w-[90%] bg-[#DE2677] text-white py-2 rounded-md font-semibold text-sm hover:bg-[#c01f66] transition-all duration-300 translate-y-full opacity-0 group-hover:translate-y-0 group-hover:opacity-100 shadow-md">
+                Add to Cart
+            </button></div>
+        </div>
+        
+        <!-- Product Info -->
+        <div class="p-4">
+            <p class="text-md text-gray-500 mb-1">Medicube</p>
+            <h3 class="text-base font-bold text-black mb-2 line-clamp-2">
+                Collagen Jelly Cream
+            </h3>
+            <div class="flex items-center gap-2">
+                <span class="text-xs text-black line-through">EGP 1,899.00</span>
+                <span class="text-lg font-bold text-[#DE2677]">EGP 1300.00</span>
+            </div>
+        </div>
+    </div>
+</div>
+        </div>
+        <div class="swiper-scrollbar !relative !mt-6"></div>
+    </div>
+</section>
+
+              <!-- ====== Info Section Above Footer ====== -->
+      <section class="py-20">
+        <div
+          class="container mx-auto px-6 md:px-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-center"
+        >
+          <div class="flex flex-col items-center">
+            <div class="pb-5">
+              <i class="ph-light ph-truck text-4xl"></i>
+            </div>
+            <h3 class="font-bold text-sm md:text-base uppercase tracking-wide">
+              FREE SHIPPING
+            </h3>
+            <p class="text-[#1F1F1F] text-sm mt-1">
+              Free shipping on all order above 1000 EGP
+            </p>
+          </div>
+
+          <div class="flex flex-col items-center">
+            <div class="pb-5">
+              <i class="ph-light ph-headset text-4xl"></i>
+            </div>
+            <h3 class="font-bold text-sm md:text-base uppercase tracking-wide">
+              SUPPORT 24/7
+            </h3>
+            <p class="text-[#1F1F1F] text-sm mt-1">
+              Contact us 24 hours a day, 7 days a week
+            </p>
+          </div>
+
+          <div class="flex flex-col items-center">
+            <div class="pb-5">
+              <i class="ph-light ph-package text-4xl"></i>
+            </div>
+            <h3 class="font-bold text-sm md:text-base uppercase tracking-wide">
+              14 DAYS RETURN
+            </h3>
+            <p class="text-[#1F1F1F] text-sm mt-1">
+              Simply return it within 14 days for an exchange
+            </p>
+          </div>
+
+          <div class="flex flex-col items-center">
+            <div class="pb-5">
+              <i class="ph-light ph-credit-card text-4xl"></i>
+            </div>
+            <h3 class="font-bold text-sm md:text-base uppercase tracking-wide">
+              100% PAYMENT SECURE
+            </h3>
+            <p class="text-[#1F1F1F] text-sm mt-1">We ensure secure payment</p>
+          </div>
+        </div>
+      </section>
+
+
+              <!-- ====== Footer Section ====== -->
+      <footer class="bg-[#1F1F1F] text-white py-8 md:py-12">
+ <div class="container mx-auto px-4 sm:px-6 lg:px-12 xl:px-20">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-8 md:gap-10">
+      <!-- Logo and Description -->
+      <div class="sm:col-span-2 lg:col-span-5">
+        <img
+          src="/imgs/logo2.png"
+          alt="logo"
+          class="w-[10rem] h-[6rem] pb-4 object-contain"
+        />
+        <p class="text-white text-base md:text-lg lg:w-[70%] mb-5">
+          Beauty is the ultimate destination for the most in-demand and
+          innovative beauty brands in Egypt.
+        </p>
+
+        <div class="flex space-x-4">
+          <a href="#" class="hover:text-[#DE2677] transition">
+            <i class="fab fa-instagram text-lg"></i>
+          </a>
+          <a href="#" class="hover:text-[#DE2677] transition">
+            <i class="fab fa-facebook-f text-lg"></i>
+          </a>
+          <a href="#" class="hover:text-[#DE2677] transition">
+            <i class="fab fa-tiktok text-lg"></i>
+          </a>
+          <a href="#" class="hover:text-[#DE2677] transition">
+            <i class="fab fa-youtube text-lg"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- About Beauty -->
+      <div class="lg:col-span-2">
+        <h3 class="font-semibold text-lg mb-3 md:mb-4">About Beauty</h3>
+        <ul class="space-y-3 md:space-y-5 text-gray-300 text-sm">
+          <li>
+            <a href="#" class="hover:text-[#DE2677] text-white flex items-center gap-2 md:gap-4 text-base md:text-lg">
+              <span>›</span> About
+            </a>
+          </li>
+          <li>
+            <a href="#" class="hover:text-[#DE2677] text-white flex items-center gap-2 md:gap-4 text-base md:text-lg">
+              <span>›</span> Blog
+            </a>
+          </li>
+          <li>
+            <a href="#" class="hover:text-[#DE2677] text-white flex items-center gap-2 md:gap-4 text-base md:text-lg">
+              <span>›</span> Our partners
+            </a>
+          </li>
+          <li>
+            <a href="#" class="hover:text-[#DE2677] text-white flex items-center gap-2 md:gap-4 text-base md:text-lg">
+              <span>›</span> Privacy Policy
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Customer Care -->
+      <div class="lg:col-span-2">
+        <h3 class="font-semibold text-lg mb-3 md:mb-4">Customer Care</h3>
+        <ul class="space-y-3 md:space-y-5 text-gray-300 text-sm">
+          <li>
+            <a href="#" class="hover:text-[#DE2677] text-white flex items-center gap-2 md:gap-4 text-base md:text-lg">
+              <span>›</span> Contact
+            </a>
+          </li>
+          <li>
+            <a href="#" class="hover:text-[#DE2677] text-white flex items-center gap-2 md:gap-4 text-base md:text-lg">
+              <span>›</span> FAQs
+            </a>
+          </li>
+          <li>
+            <a href="#" class="hover:text-[#DE2677] text-white flex items-center gap-2 md:gap-4 text-base md:text-lg">
+              <span>›</span> Delivery
+            </a>
+          </li>
+          <li>
+            <a href="#" class="hover:text-[#DE2677] text-white flex items-center gap-2 md:gap-4 text-base md:text-lg">
+              <span>›</span> Refund Policy
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Legal -->
+      <div class="lg:col-span-3">
+        <h3 class="font-semibold text-lg mb-3 md:mb-4">Legal</h3>
+        <ul class="space-y-3 md:space-y-5 text-gray-300 text-sm">
+          <li>
+            <a href="#" class="hover:text-[#DE2677] text-white flex items-center gap-2 md:gap-4 text-base md:text-lg">
+              <span>›</span> Terms & Conditions
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</footer>
+
+      <!-- ====== Bottom Bar Section ====== -->
+      <div class="bg-white py-3">
+        <div
+          class="container md:px-[9rem] lg:px-[2rem] flex flex-col md:flex-row justify-between items-center gap-4"
+        >
+          <div class="flex gap-2">
+            <img src="/imgs/qumra.png" alt="qumra" />
+            <p class="text-gray-700 text-sm text-center md:text-right">
+              Powered by Qumra
+            </p>
+          </div>
+          <div class="flex items-center">
+            <img src="/imgs/pay.png" alt="Visa" class="h-6 object-contain" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+<script>
+const { createApp } = Vue;
+
+createApp({
+  data() {
+    return {
+      expandedFAQ: 0,
+      expandedItem: null,
+                    timeline: [
+                        { id: 1, title: '2-4 Weeks', content: 'Initial improvements in skin texture and reduced oiliness as the product begins to regulate sebum production.' },
+                        { id: 2, title: '5-8 Weeks', content: 'Noticeable reduction in acne breakouts, clearer pores, and improved skin balance with continued use.' },
+                        { id: 3, title: '8-12 Weeks', content: 'Significant improvement in skin clarity, minimized acne scars, and overall enhanced skin health.' }
+                    ],
+      // Header
+      open: false,
+      languages: [
+        { code: "en", label: "EN", flag: "imgs/flag-en.png" },
+        { code: "ar", label: "AR", flag: "imgs/flag-ar.png" },
+      ],
+      selected: { code: "en", label: "EN", flag: "imgs/flag-en.png" },
+      mobileMenuOpen: false,
+      searchQuery: "",
+
+      // Product (single consolidated product object)
+      product: {
+        name: 'Dermactive Anti-Clear Gentle Cleansing Gel',
+        price: 528.00,
+        originalPrice: 800,
+        reviews: 150,
+        sku: 'DCG001',
+        category: 'Cleansers',
+        tags: 'Face Care, Cleansing',
+        description: 'A gentle cleansing gel that effectively removes impurities while maintaining skin\'s natural balance. Perfect for daily use.',
+        vendor: 'Dermactive',
+        sizes: ['200 ml', '250 ml'],
+        ingredients: 'Water, Glycerin, Sodium Laureth Sulfate, Cocamidopropyl Betaine, PEG-7 Glyceryl Cocoate, Sodium Chloride, Fragrance',
+        images: [
+          '/imgs/product7.png',
+          '/imgs/product2.png',
+          '/imgs/product3.png',
+        ]
+      },
+
+      selectedImage: 0,
+      selectedSize: '200 ml',
+      quantity: 1,
+      sliderPosition: 50,
+      rating: 0,
+      comment: '',
+      name: '',
+      email: '',
+      saveInfo: false,
+
+      // Tabs
+      tabs: ['How to use', 'Ingredients', 'Reviews'],
+      activeTab: 'How to use',
+
+      // Reviews
+      reviews: [
+        {
+          id: 1,
+          name: 'Sarah Ahmed',
+          avatar: '/imgs/customer.jpg',
+          rating: 5,
+          date: 'Oct 15, 2025',
+          comment: 'Amazing product! My skin feels so clean and fresh. Highly recommend!'
+        },
+        {
+          id: 2,
+          name: 'Mona Ali',
+          avatar: '/imgs/customer.jpg',
+          rating: 4,
+          date: 'Oct 10, 2025',
+          comment: 'Great cleanser, gentle on my sensitive skin. Will buy again.'
+        }
+      ],
+                    products: [
+                        {
+                            id: 1,
+                            name: 'Dermactive Act: Clear Gentle Cleansing Gel',
+                            size: '200 ml',
+                            price: 198,
+                            image: '/imgs/product7.png',
+                            selected: true
+                        },
+                        {
+                            id: 2,
+                            name: 'Dermactive Act: Clear Hydra-Mortifying Gel 50ml',
+                            size: '50 ml',
+                            price: 192,
+                            image: ' /imgs/product2.png',
+                            selected: true
+                        },
+                        {
+                            id: 3,
+                            name: 'Dermactive Act: Clear Correcting Serum 30ml',
+                            size: '30 ml',
+                            price: 250,
+                            image: '/imgs/product3.png',
+                            selected: true
+                        }
+                    ],
+
+      // Bought Together
+      boughtTogether: [
+        { image: '/imgs/product1.png', price: 528 },
+        { image: '/imgs/product2.png', price: 350 },
+        { image: '/imgs/product3.png', price: 420 }
+      ],
+
+      // Related Products
+      relatedProducts: [
+        { id: 1, name: 'Gentle Toner', image: 'https://via.placeholder.com/300x300/FFB6C1/fff?text=Toner', price: 320, oldPrice: 400, discount: 20 },
+        { id: 2, name: 'Face Moisturizer', image: 'https://via.placeholder.com/300x300/98D8C8/fff?text=Moisturizer', price: 450, oldPrice: null, discount: 0 },
+        { id: 3, name: 'Serum Plus', image: 'https://via.placeholder.com/300x300/DDA0DD/fff?text=Serum', price: 680, oldPrice: 850, discount: 20 },
+        { id: 4, name: 'Night Cream', image: 'https://via.placeholder.com/300x300/B0E0E6/fff?text=Cream', price: 520, oldPrice: null, discount: 0 }
+      ],
+
+      // Recent Products
+      recentProducts: [
+        { id: 1, name: 'Sunscreen SPF 50', image: 'https://via.placeholder.com/300x300/FFE4B5/fff?text=Sunscreen', price: 380, oldPrice: null, discount: 0 },
+        { id: 2, name: 'Eye Cream', image: 'https://via.placeholder.com/300x300/F0E68C/fff?text=Eye+Cream', price: 420, oldPrice: 500, discount: 16 },
+        { id: 3, name: 'Lip Balm', image: 'https://via.placeholder.com/300x300/FFC0CB/fff?text=Lip+Balm', price: 180, oldPrice: null, discount: 0 },
+        { id: 4, name: 'Face Mask', image: 'https://via.placeholder.com/300x300/E6E6FA/fff?text=Mask', price: 290, oldPrice: null, discount: 0 }
+      ],
+
+      // Customer Questions
+      customerQuestions: [
+        { id: 1, question: 'Is this suitable for sensitive skin?', answer: 'Yes, this product is dermatologically tested and suitable for all skin types including sensitive skin.' },
+        { id: 2, question: 'How often should I use this?', answer: 'We recommend using this cleanser twice daily, morning and evening, for best results.' }
+      ]
+    }
+  },
+  computed: {
+    bundleTotal() {
+      return this.boughtTogether.reduce((sum, item) => sum + item.price, 0);
+    },
+                  selectedCount() {
+                    return this.products.filter(p => p.selected).length;
+                },
+                originalTotal() {
+                    return this.products.reduce((sum, p) => sum + p.price, 0);
+                },
+                totalPrice() {
+                    const selectedSum = this.products
+                        .filter(p => p.selected)
+                        .reduce((sum, p) => sum + p.price, 0);
+                    
+                    // Apply 5% discount
+                    const discounted = selectedSum * 0.95;
+                    return Math.round(discounted);
+                }
+            },
+
+  mounted() {
+    // Initialize Swipers
+    new Swiper('.relatedSwiper', {
+      slidesPerView: 1,
+      spaceBetween: 20,
+      navigation: {
+        nextEl: '.swiper-button-next-related',
+        prevEl: '.swiper-button-prev-related',
+      },
+      breakpoints: {
+        640: { slidesPerView: 2 },
+        768: { slidesPerView: 3 },
+        1024: { slidesPerView: 4 }
+      }
+    });
+
+    new Swiper('.recentSwiper', {
+      slidesPerView: 1,
+      spaceBetween: 20,
+      navigation: {
+        nextEl: '.swiper-button-next-recent',
+        prevEl: '.swiper-button-prev-recent',
+      },
+      breakpoints: {
+        640: { slidesPerView: 2 },
+        768: { slidesPerView: 3 },
+        1024: { slidesPerView: 4 }
+      }
+    });
+  },
+  methods: {
+    prevImage() {
+                    console.log('Previous image');
+                },
+                nextImage() {
+                    console.log('Next image');
+                },
+    selectLanguage(lang) {
+      this.selected = lang;
+      this.open = false;
+    },
+    handleSearchInput() {
+      // Search functionality
+    },
+    increaseQuantity() {
+      this.quantity++;
+    },
+    decreaseQuantity() {
+      if (this.quantity > 1) {
+        this.quantity--;
+      }
+    },
+    nextImage() {
+      this.selectedImage = (this.selectedImage + 1) % this.product.images.length;
+    },
+    prevImage() {
+      this.selectedImage = (this.selectedImage - 1 + this.product.images.length) % this.product.images.length;
+    }
+  }
+}).mount("#app");
+
+
+new Swiper('.bestSellersSwiper', { 
+  slidesPerView: 'auto', 
+  spaceBetween: 20, 
+  loop: true, 
+  speed: 800, 
+  autoplay: { delay: 4000, disableOnInteraction: false }, 
+  navigation: { nextEl: '.swiper-button-next-bestsellers', prevEl: '.swiper-button-prev-bestsellers' }, 
+  scrollbar: { el: '.swiper-scrollbar', draggable: true, dragSize: 300 }, 
+  breakpoints: { 640:{slidesPerView:2}, 768:{slidesPerView:3}, 1024:{slidesPerView:4} } 
+});
+
+</script>
+
+  </body>
+</html>
